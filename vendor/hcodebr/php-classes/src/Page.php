@@ -16,13 +16,13 @@ class Page{
 	];
 
 	// Construtor recebe um array com váriaveis, caso não informado ele recebe as variaveis defaults caso informado subistitui a defaults com o comando merge se necessário.
-	public function __construct($opts = array())
+	public function __construct($opts = array(), $tpl_dir = "/views/")
 	{
 		$this->options = array_merge($this->defaults, $opts);
 
 		$config = array(
 			//Diretório onde será armazenado o código HTML das paginas do projeto.
-			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"]."/views/",
+			"tpl_dir"       => $_SERVER["DOCUMENT_ROOT"]. $tpl_dir,
 			//Diretório onde será armazenados os caches do projeto
 			"cache_dir"     => $_SERVER["DOCUMENT_ROOT"]."/views-cache/",
 			"debug"         => false // set to false to improve the speed

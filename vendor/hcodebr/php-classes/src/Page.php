@@ -12,6 +12,8 @@ class Page{
 
 	//Atributo que recebe as variáveis padrão.
 	private $defaults = [
+		"header"=>true,
+		"footer"=>true,
 		"data"=>[]
 	];
 
@@ -35,7 +37,7 @@ class Page{
 
 		$this->setData($this->options["data"]);
 
-		$this->tpl->draw("header");
+		if ($this->options["header"] === true) $this->tpl->draw("header");
 	}
 
 	public function setTpl($name, $data = array(), $returnHTML = false)
@@ -54,7 +56,7 @@ class Page{
 	}
 
 	public function __destruct(){
-		$this->tpl->draw("footer");
+		if ($this->options["header"] === true) $this->tpl->draw("footer");
 	}
 
 

@@ -39,7 +39,7 @@ class User extends Model
 		}
 	}
 
-	public function verifyLogin($inadmin = true)
+	public static function verifyLogin($inadmin = true)
 	{
 		if
 		(
@@ -57,8 +57,67 @@ class User extends Model
 		}
 	}
 
-	public function logout(){
+	public static function logout()
+	{
 		unset($_SESSION[User::SESSION]);
+	}
+
+	public static function listAll()
+	{
+		$sql = new Sql;
+
+	return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY desperson");
+	}
+
+	public function save()
+	{
+		$sql = new Sql;
+
+		$results = $sql->select("CALL sp_users_save(:desperson,:deslogin,:despassword,:desemail,:nrphone,:inadmin)", [
+			":desperson"=>$this->getdesperson(),
+			":deslogin"=>$this->getdeslogin(),
+			":despassword"=>$this->getdespassword(),
+			":desemail"=>$this->getdesemail(),
+			":nrphone"=>$this->getnrphone(),
+			":inadmin"=>$this->getinadmin()
+		]);
+
+
+		$this->setData($results[0]);
+	}
+
+	public function get($iduser)
+	{
+		$sql = new Sql;
+
+		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", [":iduser"=>$iduser]);
+
+		$this->setData($results[0]);
+	}
+
+	public function update($iduser)
+	{
+		$sql = new Sql;
+
+		$results = $sql->select("CALL sp_usersupdate_save(:iduser,:desperson,:deslogin,:despassword,:desemail,:nrphone,:inadmin)", [
+			":iduser"=>$iduser,
+			":desperson"=>$this->getdesperson(),
+			":deslogin"=>$this->getdeslogin(),
+			":despassword"=>$this->getdespassword(),
+			":desemail"=>$this->getdesemail(),
+			":nrphone"=>$this->getnrphone(),
+			":inadmin"=>$this->getinadmin()
+		]);
+
+
+		$this->setData($results[0]);
+	}
+
+	public function delete()
+	{
+		$sql = new Sql;
+
+		$sql->select("CALL sp_users_delete(:iduser)",[":iduser"=>$this->getiduser()]);
 	}
 }
 
